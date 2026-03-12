@@ -1,4 +1,4 @@
-﻿namespace MarsPlateauExplore;
+﻿namespace MarsPlateauExplore.Application;
 
 public class RoverStatusRegistry : IRoverStatusRegistry
 {

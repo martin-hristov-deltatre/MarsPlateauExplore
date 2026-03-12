@@ -1,7 +1,8 @@
-﻿using MarsPlateauExplore.Domain;
+﻿using MarsPlateauExplore.Application;
+using MarsPlateauExplore.Domain;
 using MarsPlateauExplore.Enums;
 
-namespace MarsPlateauExplore.UnitTests;
+namespace MarsPlateauExplore.UnitTests.Application;
 public class InputReceiverTests
 {
     #region TryParseAreaSize Tests

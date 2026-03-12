@@ -1,4 +1,4 @@
-﻿namespace MarsPlateauExplore;
+﻿namespace MarsPlateauExplore.Application;
 public interface IRoverStatusRegistry
 {
     bool AnyOtherRoverMoving(int currentRoverId);

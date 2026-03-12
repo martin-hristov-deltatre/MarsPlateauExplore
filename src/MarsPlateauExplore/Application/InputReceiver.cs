@@ -3,7 +3,7 @@ using MarsPlateauExplore.Enums;
 using MarsPlateauExplore.Infrastructure;
 using MarsPlateauExplore.Infrastructure.Parsers;
 
-namespace MarsPlateauExplore;
+namespace MarsPlateauExplore.Application;
 
 public class InputReceiver : IInputReceiver
 {

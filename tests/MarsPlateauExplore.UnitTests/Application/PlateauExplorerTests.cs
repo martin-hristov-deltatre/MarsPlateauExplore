@@ -4,7 +4,7 @@ using MarsPlateauExplore.Enums;
 using MarsPlateauExplore.Infrastructure;
 using Moq;
 
-namespace MarsPlateauExplore.Tests;
+namespace MarsPlateauExplore.Tests.Application;
 
 public class PlateauExplorerTests
 {

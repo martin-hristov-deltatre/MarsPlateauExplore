@@ -1,5 +1,4 @@
-﻿using MarsPlateauExplore.Application;
-using MarsPlateauExplore.Commands;
+﻿using MarsPlateauExplore.Commands;
 using MarsPlateauExplore.Domain;
 using MarsPlateauExplore.Enums;
 using MarsPlateauExplore.Infrastructure;
