@@ -4,11 +4,11 @@ using MarsPlateauExplore.Domain;
 using MarsPlateauExplore.Enums;
 using MarsPlateauExplore.Infrastructure;
 
-namespace MarsPlateauExplore.Controllers;
+namespace MarsPlateauExplore.Application;
 
-public class RoverController
+public class RoverController : IRoverController
 {
-    public Result Execute(Rover rover, List<Instruction> instructions, Area area, RoverStatusRegistry statusRegistry)
+    public Result Execute(Rover rover, List<Instruction> instructions, Area area, IRoverStatusRegistry statusRegistry)
     {
         statusRegistry.SetMoving(rover.Id, true);
 

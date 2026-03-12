@@ -5,7 +5,7 @@ using MarsPlateauExplore.Infrastructure.Parsers;
 
 namespace MarsPlateauExplore;
 
-public class InputReceiver
+public class InputReceiver : IInputReceiver
 {
     public Coordinates GetAreaSize()
     {

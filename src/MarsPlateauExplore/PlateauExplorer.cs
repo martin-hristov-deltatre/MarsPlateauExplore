@@ -1,4 +1,4 @@
-﻿using MarsPlateauExplore.Controllers;
+﻿using MarsPlateauExplore.Application;
 using MarsPlateauExplore.Domain;
 using MarsPlateauExplore.Enums;
 using MarsPlateauExplore.Extensions;
@@ -11,33 +11,31 @@ public class PlateauExplorer
     private const int RoverCount = 2;
     private int _roverId = 1;
     private readonly Dictionary<int, Rover> _rovers = [];
-    private readonly InputReceiver _inputReceiver;
+    private readonly IInputReceiver _inputReceiver;
     private readonly Area _area;
-    private readonly RoverStatusRegistry _roverStatusRegistry;
+    private readonly IRoverStatusRegistry _roverStatusRegistry;
 
-    public PlateauExplorer(InputReceiver inputReceiver, Area area, RoverStatusRegistry roverStatusRegistry)
+    public PlateauExplorer(IInputReceiver inputReceiver, Area area, IRoverStatusRegistry roverStatusRegistry)
     {
         _inputReceiver = inputReceiver;
         _area = area;
         _roverStatusRegistry = roverStatusRegistry;
     }
 
-    public void Execute()
+    public void Execute(IRoverController roverController)
     {
         while (true)
         {
-            ExecuteOnce();
+            ExecuteOnce(roverController);
         }
     }
 
-    internal Result ExecuteOnce()
+    internal Result ExecuteOnce(IRoverController roverController)
     {
         var roverCoordinatesAndDirection = _inputReceiver.GetRoverCoordinatesAndDirection(_roverId);
         var instructions = _inputReceiver.GetRoverInstructions(_roverId);
 
         var rover = GetOrCreateRover(_roverId, roverCoordinatesAndDirection);
-
-        var roverController = new RoverController();
 
         var result = roverController.Execute(rover, instructions, _area, _roverStatusRegistry);
         if (!result.IsSuccess)

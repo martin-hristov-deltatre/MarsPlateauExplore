@@ -24,6 +24,7 @@ public static class InstructionsParser
         {
             if (!_instructionMap.TryGetValue(instructionLetter.ToString(), out var insturction))
             {
+                instructions = [];
                 return Result.Failed($"Invalid instruction {instructionLetter}. Valid instructions are L, R, M.");
             }
             instructions.Add(insturction);

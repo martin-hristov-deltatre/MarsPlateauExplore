@@ -7,6 +7,9 @@ public static class CoordinateParser
     {
         coordinates = new Coordinates(0, 0);
 
+        if (input == null)
+            return Result.Failed("Input cannot be null. Please enter two coordinates.");
+
         var parts = input?.Split(' ');
 
         if (parts?.Length < 2)

@@ -1,6 +1,6 @@
 ﻿namespace MarsPlateauExplore;
 
-public class RoverStatusRegistry
+public class RoverStatusRegistry : IRoverStatusRegistry
 {
     private readonly Dictionary<int, bool> _movingStatus = [];
 

@@ -1,4 +1,5 @@
 ﻿using MarsPlateauExplore;
+using MarsPlateauExplore.Application;
 using MarsPlateauExplore.Domain;
 
 internal class Program
@@ -9,6 +10,6 @@ internal class Program
 
         var area = new Area(inputReceiver.GetAreaSize());
 
-        new PlateauExplorer(inputReceiver, area, new RoverStatusRegistry()).Execute();
+        new PlateauExplorer(inputReceiver, area, new RoverStatusRegistry()).Execute(new RoverController());
     }
 }
