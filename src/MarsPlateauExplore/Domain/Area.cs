@@ -1,4 +1,6 @@
-﻿namespace MarsPlateauExplore.Domain;
+﻿using MarsPlateauExplore.Infrastructure;
+
+namespace MarsPlateauExplore.Domain;
 
 public class Area(Coordinates maxDimension)
 {
@@ -16,5 +18,18 @@ public class Area(Coordinates maxDimension)
     public void UpsertOccupiedCoordinates(int id, Coordinates coordinates)
     {
         _occupiedCoordinates[id] = coordinates;
+    }
+
+    public Result TryMove(Rover rover, Coordinates coordinates)
+    {
+        if (!IsWithinBounds(coordinates))
+            return Result.Failed($"Rover {rover.Id} cannot move to ({coordinates.X}, {coordinates.Y}) as it is out of bounds.");
+
+        if (IsOccupied(rover.Id, coordinates))
+            return Result.Failed($"Rover {rover.Id} cannot move to ({coordinates.X}, {coordinates.Y}) as it is occupied by another rover.");
+
+        UpsertOccupiedCoordinates(rover.Id, coordinates);
+
+        return Result.Success();
     }
 }

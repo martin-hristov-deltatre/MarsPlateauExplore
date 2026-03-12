@@ -2,6 +2,7 @@
 using MarsPlateauExplore.Domain;
 using MarsPlateauExplore.Enums;
 using MarsPlateauExplore.Extensions;
+using MarsPlateauExplore.Infrastructure;
 
 namespace MarsPlateauExplore;
 
@@ -29,29 +30,29 @@ public class PlateauExplorer
         }
     }
 
-    internal (bool isSuccess, string error) ExecuteOnce()
+    internal Result ExecuteOnce()
     {
         var roverCoordinatesAndDirection = _inputReceiver.GetRoverCoordinatesAndDirection(_roverId);
         var instructions = _inputReceiver.GetRoverInstructions(_roverId);
 
         var rover = GetOrCreateRover(_roverId, roverCoordinatesAndDirection);
 
-        var roverController = new RoverController(rover, _area, instructions, _roverStatusRegistry);
+        var roverController = new RoverController();
 
-        var (isSuccess, error) = roverController.Move();
-        if (!isSuccess)
+        var result = roverController.Execute(rover, instructions, _area, _roverStatusRegistry);
+        if (!result.IsSuccess)
         {
-            Console.WriteLine($"Error: {error}");
+            Console.WriteLine($"Error: {result.Error}");
             AdvanceRoverId();
             Console.WriteLine($"{rover.Coordinates.X} {rover.Coordinates.Y} {rover.Direction.GetDescription()}");
-            return (isSuccess, error);
+            return Result.Failed(result.Error);
         }
 
         Console.WriteLine($"Rover {rover.Id} moved successfully.");
         Console.WriteLine($"{rover.Coordinates.X} {rover.Coordinates.Y} {rover.Direction.GetDescription()}");
 
         AdvanceRoverId();
-        return (isSuccess, error);
+        return Result.Success();
     }
 
     private Rover GetOrCreateRover(int id, (Coordinates Coordinates, Direction Direction) positionData)

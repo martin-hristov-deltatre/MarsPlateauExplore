@@ -31,8 +31,8 @@ public class Rover(int id, Coordinates coordinates, Direction direction)
         _               => new Coordinates(0, 0)
     };
 
-    public void MoveTo(Coordinates coordinates)
+    public void MoveTo()
     {
-        Coordinates = coordinates;
+        Coordinates = GetNextCoordinates();
     }
 }

@@ -1,6 +1,6 @@
 ﻿using MarsPlateauExplore.Enums;
 
-namespace MarsPlateauExplore.Parsers;
+namespace MarsPlateauExplore.Infrastructure.Parsers;
 
 public static class DirectionParser
 {
@@ -12,23 +12,23 @@ public static class DirectionParser
         { "W", Direction.West }
     };
 
-    public static (bool isSuccess, string error) TryParse(string? input, out Direction direction)
+    public static Result TryParse(string? input, out Direction direction)
     {
         direction = Direction.North;
 
         var positionsAndDirection = input?.Split(' ');
         if (positionsAndDirection?.Length != 3)
         {
-            return (false, "Invalid input. Please enter a direction.");
+            return Result.Failed("Invalid input. Please enter a direction.");
         }
 
         var directionInput = positionsAndDirection[2];
 
         if (!_directionMap.TryGetValue(directionInput, out direction))
         {
-            return (false, "Invalid input. Please enter a valid direction (N, E, S, W).");
+            return Result.Failed("Invalid input. Please enter a valid direction (N, E, S, W).");
         }
 
-        return (true, string.Empty);
+        return Result.Success();
     }
 }

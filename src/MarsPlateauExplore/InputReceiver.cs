@@ -1,6 +1,7 @@
 ﻿using MarsPlateauExplore.Domain;
 using MarsPlateauExplore.Enums;
-using MarsPlateauExplore.Parsers;
+using MarsPlateauExplore.Infrastructure;
+using MarsPlateauExplore.Infrastructure.Parsers;
 
 namespace MarsPlateauExplore;
 
@@ -13,10 +14,10 @@ public class InputReceiver
         while (true)
         {
             var input = Console.ReadLine();
-            var (isSuccess, error) = TryParseAreaSize(input!, out Coordinates coordinates);
-            if (!isSuccess)
+            var result = TryParseAreaSize(input!, out Coordinates coordinates);
+            if (!result.IsSuccess)
             {
-                Console.WriteLine(error);
+                Console.WriteLine(result.Error);
                 continue;
             }
 
@@ -24,23 +25,23 @@ public class InputReceiver
         }
     }
 
-    internal static (bool isSuccess, string error) TryParseAreaSize(string input, out Coordinates coordinates)
+    internal static Result TryParseAreaSize(string input, out Coordinates coordinates)
     {
-        var (isCoordinateParseSuccess, coordinateParseError) = CoordinateParser.TryParse(input, out coordinates);
-        if (!isCoordinateParseSuccess)
+        var coordinateParseResult = CoordinateParser.TryParse(input, out coordinates);
+        if (!coordinateParseResult.IsSuccess)
         {
-            return (false, coordinateParseError);
+            return Result.Failed(coordinateParseResult.Error);
         }
 
-        var (areaSizeParseSuccess, areaSizeError) = AreaSizeParser.TryParse(coordinates);
-        if (!areaSizeParseSuccess)
+        var areaSizeResult = AreaSizeParser.TryParse(coordinates);
+        if (!areaSizeResult.IsSuccess)
         {
-            return (false, areaSizeError);
+            return Result.Failed(areaSizeResult.Error);
         }
 
         Console.WriteLine($"Plateau size is: {coordinates.X} {coordinates.Y}");
 
-        return (true, string.Empty);
+        return Result.Success();
     }
 
     public (Coordinates Coordinates, Direction Direction) GetRoverCoordinatesAndDirection(int roverId)
@@ -51,10 +52,10 @@ public class InputReceiver
         {
             var input = Console.ReadLine();
 
-            var (isSuccess, error) = TryParseRoverCoordinatesAndDirection(input!, out Coordinates coordinates, out Direction direction);
-            if (!isSuccess)
+            var result = TryParseRoverCoordinatesAndDirection(input!, out Coordinates coordinates, out Direction direction);
+            if (!result.IsSuccess)
             {
-                Console.WriteLine(error);
+                Console.WriteLine(result.Error);
                 continue;
             }
 
@@ -63,23 +64,23 @@ public class InputReceiver
         }
     }
 
-    internal static (bool isSuccess, string error) TryParseRoverCoordinatesAndDirection(
+    internal static Result TryParseRoverCoordinatesAndDirection(
         string input, out Coordinates coordinates, out Direction direction)
     {
-        var (isCoordinateParseSuccess, coordinateParseError) = CoordinateParser.TryParse(input, out coordinates);
-        if (!isCoordinateParseSuccess)
+        var coordinateParseResult = CoordinateParser.TryParse(input, out coordinates);
+        if (!coordinateParseResult.IsSuccess)
         {
             direction = default;
-            return (false, coordinateParseError);
+            return Result.Failed(coordinateParseResult.Error);
         }
 
-        var (isDirectionParseSuccess, directionParseError) = DirectionParser.TryParse(input, out direction);
-        if (!isDirectionParseSuccess)
+        var directionParseResult = DirectionParser.TryParse(input, out direction);
+        if (!directionParseResult.IsSuccess)
         {
-            return (false, directionParseError);
+            return Result.Failed(directionParseResult.Error);
         }
 
-        return (true, string.Empty);
+        return Result.Success();
     }
 
     public List<Instruction> GetRoverInstructions(int roverId)
@@ -90,10 +91,10 @@ public class InputReceiver
         {
             var input = Console.ReadLine();
 
-            var (isSuccess, error) = TryParseRoverInstructions(input!, out List<Instruction> instructions);
-            if (!isSuccess)
+            var result = TryParseRoverInstructions(input!, out List<Instruction> instructions);
+            if (!result.IsSuccess)
             {
-                Console.WriteLine(error);
+                Console.WriteLine(result.Error);
                 continue;
             }
 
@@ -101,13 +102,13 @@ public class InputReceiver
         }
     }
 
-    internal static (bool isSuccess, string error) TryParseRoverInstructions(string input, out List<Instruction> instructions)
+    internal static Result TryParseRoverInstructions(string input, out List<Instruction> instructions)
     {
-        var (isInstructionsParseSuccess, instructionsParseError) = InstructionsParser.TryParse(input, out instructions);
-        if (!isInstructionsParseSuccess)
+        var instructionsParseResult = InstructionsParser.TryParse(input, out instructions);
+        if (!instructionsParseResult.IsSuccess)
         {
-            return (false, instructionsParseError);
+            return Result.Failed(instructionsParseResult.Error);
         }
-        return (true, string.Empty);
+        return Result.Success();
     }
 }

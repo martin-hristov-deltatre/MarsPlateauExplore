@@ -1,6 +1,6 @@
 ﻿using MarsPlateauExplore.Enums;
 
-namespace MarsPlateauExplore.Parsers;
+namespace MarsPlateauExplore.Infrastructure.Parsers;
 
 public static class InstructionsParser
 {
@@ -11,24 +11,24 @@ public static class InstructionsParser
         { "M", Instruction.MoveForward }
     };
 
-    public static (bool isSuccess, string error) TryParse(string? input, out List<Instruction> instructions)
+    public static Result TryParse(string? input, out List<Instruction> instructions)
     {
         instructions = [];
 
         if (string.IsNullOrWhiteSpace(input))
         {
-            return (false, "Invalid input. Please enter a sequence of instructions.");
+            return Result.Failed("Invalid input. Please enter a sequence of instructions.");
         }
 
         foreach (var instructionLetter in input)
         {
             if (!_instructionMap.TryGetValue(instructionLetter.ToString(), out var insturction))
             {
-                return (false, $"Invalid instruction {instructionLetter}. Valid instructions are L, R, M.");
+                return Result.Failed($"Invalid instruction {instructionLetter}. Valid instructions are L, R, M.");
             }
             instructions.Add(insturction);
         }
 
-        return (true, string.Empty);
+        return Result.Success();
     }
 }
